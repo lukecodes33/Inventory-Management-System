@@ -1,1 +1,9 @@
-Hello World
+Login check:
+
+check username and password against database, save in variables
+check admin rights against database if login successful and store yes or no in variable
+pass variables to user constructor and return name if match, null if not
+
+if name != null, custom welcome message and update last login in database and device name
+if null = null, throw error and reduce a counter by 1 to only allow 4 failed attempts to 
+ogin to machine before sending alert

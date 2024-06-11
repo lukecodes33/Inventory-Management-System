@@ -1,0 +1,68 @@
+from userConstructor import userConstructor
+import sqlite3
+import sys
+import getpass
+from functions import get_current_time
+
+userDatabasePath = "Inventory-Management-System/database/userDatabase.db"
+connection = sqlite3.connect(userDatabasePath)
+cursor = connection.cursor()
+
+
+loginLoop = True
+attempts = 4
+
+while loginLoop == True:
+    if attempts == 0:
+        sys.exit(0)
+
+    userNameInput = input("Username: ")
+    passwordInput = getpass.getpass("Password: ")
+
+    user = userConstructor(userNameInput, passwordInput)
+
+    cursor.execute("SELECT password, locked FROM users WHERE username = ?", (user.username,))
+    match = cursor.fetchone()
+
+    if match is not None:
+        stored_password = match[0]
+        lockStatus = match[1]
+        
+        if stored_password == user.password and lockStatus != 1:
+            time = get_current_time()
+            cursor.execute("UPDATE users SET last_login = ? WHERE username = ?", (time, user.username))
+            connection.commit()
+            loginLoop = False
+
+        elif stored_password == user.password and lockStatus == 1:
+            print("Account is locked, contact IT to unlock")
+            
+        elif stored_password != user.password:
+            attempts -= 1
+            if attempts > 0:
+                print(f"Incorrect password - {attempts} attempts remaining!")
+            
+            else:
+                print("Account is now locked, contact IT to unlock")
+                cursor.execute("UPDATE users SET locked = ? WHERE username = ?", (1, user.username))
+                connection.commit()
+    
+    if match == None:
+        print("Username not found")
+
+cursor.execute("SELECT first_name, last_name, admin_rights FROM users WHERE username = ?", (user.username,))
+match = cursor.fetchone()
+firstName = match[0]
+lastName = match[1]
+admin_rights_value = match[2]
+
+fullName = firstName + " " + lastName
+print(f"Welcome back {fullName}")
+adminRights = False
+
+if admin_rights_value == 1:
+    adminRights = True
+
+
+
+#while True:

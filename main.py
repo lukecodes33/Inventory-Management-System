@@ -2,12 +2,13 @@ from userConstructor import userConstructor
 import sqlite3
 import sys
 import getpass
-from functions import get_current_time
+from loginFunctions import get_current_time, successful_login
+from menus import topMenu, numberSelection, itemManagementMenu
+from itemManagementFunctions import addItem, removeItem
 
 userDatabasePath = "Inventory-Management-System/database/userDatabase.db"
 connection = sqlite3.connect(userDatabasePath)
 cursor = connection.cursor()
-
 
 loginLoop = True
 attempts = 4
@@ -55,14 +56,31 @@ match = cursor.fetchone()
 firstName = match[0]
 lastName = match[1]
 admin_rights_value = match[2]
-
 fullName = firstName + " " + lastName
-print(f"Welcome back {fullName}")
 adminRights = False
 
 if admin_rights_value == 1:
     adminRights = True
 
+successful_login(fullName, time)
+
+connection.close()
 
 
-#while True:
+while True:
+    topMenu(fullName)
+
+    topMenuSelection = numberSelection()
+
+    while topMenuSelection == 1:
+        itemManagementMenu(fullName)
+        itemManagementSelection = numberSelection()
+
+        if itemManagementSelection == 1:
+            addItem()
+
+        if itemManagementSelection == 2:
+            removeItem(adminRights, stored_password)
+
+        if itemManagementSelection == 0:
+            break

@@ -1,0 +1,33 @@
+remove ability to delete items if stock is available
+Create movements database and add creation and deletion of items to while also including quantities and dates
+
+
+
+Stock Orders
+2.1 Place Order
+2.2 View Pending Orders
+2.3 Receive Order
+2.4 Cancel Order
+2.5 Order History
+
+Sales
+3.1 Process Sale
+3.2 Return Item
+3.3 View Transaction History
+
+Inventory Management
+4.1 View Low Stock Items
+4.2 Set Reorder Levels
+
+
+Admin Tools
+6.1 Create User
+6.2 Delete User
+6.3 Clear Database
+6.3.1 Clear Items Database
+6.3.2 Clear Sales Database
+6.3.3 Clear Orders Database
+6.4 Clear All Databases (CANNOT BE UNDONE)
+6.5 System Backup
+6.6 Restore System from Backup
+6.7 User Report

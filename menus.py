@@ -49,28 +49,9 @@ def itemManagementMenu(fullname):
     print("")
     print("1. Add Item".center(width))
     print("2. Remove Item".center(width))
-    print("3. Search Item".center(width))
-    print("")
-    print("0. Back".center(width))
-    print("")
-    print(f"User: {fullname}".center(width))
-    print(f"{RESET}")
-
-def searchItemMenu(fullname):
-    YELLOW = '\033[93m'
-    RESET = '\033[0m'
-    width = get_terminal_size()
-
-    header = "SEARCH BY"
-    underline = "-" * len(header)
-    
-    print(f"{YELLOW}")
-    print(center_text(header, width))
-    print(center_text(underline, width))
-    print("")
-    print("1. Item Code".center(width))
-    print("2. Item Name".center(width))
-    print("3. Show All".center(width))
+    print("3. Search Item By Code".center(width))
+    print("4. Search Item By Name".center(width))
+    print("5. Search All Items".center(width))
     print("")
     print("0. Back".center(width))
     print("")

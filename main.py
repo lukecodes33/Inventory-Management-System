@@ -3,7 +3,7 @@ import sqlite3
 import sys
 import getpass
 from loginFunctions import get_current_time, successful_login
-from menus import topMenu, numberSelection, itemManagementMenu, searchItemMenu
+from menus import topMenu, numberSelection, itemManagementMenu
 from itemManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
 
 userDatabasePath = "database/userDatabase.db"
@@ -87,30 +87,13 @@ while True:
             removeItem(adminRights, stored_password)
 
         elif itemManagementSelection == 3:
+            searchByProductCode()
 
-            itemManagementLoop = True
+        elif itemManagementSelection == 4:       
+            searchByProductName()
 
-            while itemManagementLoop == True:
-            
-                searchItemMenu(fullName)
-                
-                searchItemSelection = numberSelection()
-
-                if searchItemSelection == 1:
-                    searchByProductCode()
-                
-                elif searchItemSelection == 2:
-                    searchByProductName()
-                
-                elif searchItemSelection == 3:
-                    showAllProducts()
-
-                elif searchItemSelection == 0:
-                    itemManagementLoop == False
-                    break
-
-                else:
-                    print(f"{RED}Invalid input. Please enter 'Y' to confirm or 'N' to cancel.{RESET}")
+        elif itemManagementSelection == 5:       
+            showAllProducts()
             
         elif itemManagementSelection == 0:
             break

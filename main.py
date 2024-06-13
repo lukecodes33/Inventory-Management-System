@@ -3,10 +3,10 @@ import sqlite3
 import sys
 import getpass
 from loginFunctions import get_current_time, successful_login
-from menus import topMenu, numberSelection, itemManagementMenu
-from itemManagementFunctions import addItem, removeItem
+from menus import topMenu, numberSelection, itemManagementMenu, searchItemMenu
+from itemManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
 
-userDatabasePath = "Inventory-Management-System/database/userDatabase.db"
+userDatabasePath = "database/userDatabase.db"
 connection = sqlite3.connect(userDatabasePath)
 cursor = connection.cursor()
 
@@ -66,8 +66,12 @@ successful_login(fullName, time)
 
 connection.close()
 
+RED = '\033[91m'
+RESET = '\033[0m'
+
 
 while True:
+
     topMenu(fullName)
 
     topMenuSelection = numberSelection()
@@ -79,8 +83,37 @@ while True:
         if itemManagementSelection == 1:
             addItem()
 
-        if itemManagementSelection == 2:
+        elif itemManagementSelection == 2:
             removeItem(adminRights, stored_password)
 
-        if itemManagementSelection == 0:
+        elif itemManagementSelection == 3:
+
+            itemManagementLoop = True
+
+            while itemManagementLoop == True:
+            
+                searchItemMenu(fullName)
+                
+                searchItemSelection = numberSelection()
+
+                if searchItemSelection == 1:
+                    searchByProductCode()
+                
+                elif searchItemSelection == 2:
+                    searchByProductName()
+                
+                elif searchItemSelection == 3:
+                    showAllProducts()
+
+                elif searchItemSelection == 0:
+                    itemManagementLoop == False
+                    break
+
+                else:
+                    print(f"{RED}Invalid input. Please enter 'Y' to confirm or 'N' to cancel.{RESET}")
+            
+        elif itemManagementSelection == 0:
             break
+
+        else:
+            print(f"{RED}Invalid input.{RESET}")

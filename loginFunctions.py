@@ -8,7 +8,7 @@ def get_current_time():
     return formatted_time
 
 def successful_login(name, time):
-    loginsDatabasePath = "Inventory-Management-System/database/loginsDatabase.db"
+    loginsDatabasePath = "database/loginsDatabase.db"
     connection = sqlite3.connect(loginsDatabasePath)
     cursor = connection.cursor()
     hostname = socket.gethostname()

@@ -4,6 +4,11 @@ import getpass
 import os
 
 def get_decimal_input(prompt):
+    
+    """
+    Prompts the user for a decimal input with up to 2 decimal places.
+    If the input is invalid or has more than 2 decimal places, it prompts again.
+    """
 
     RED = '\033[91m'
     RESET = '\033[0m'
@@ -18,7 +23,13 @@ def get_decimal_input(prompt):
         except ValueError:
             print(f"{RED}Invalid input. Please enter a valid number.{RESET}")
 
-def addItem(username, time):
+def addItem(fullname, time):
+
+    """
+    Adds a new item to the inventory and records the movement.
+    Prompts the user for item details, validates input, and inserts the item into the database.
+    Also records the addition in the movements database.
+    """
 
     YELLOW = '\033[93m'
     RED = '\033[91m'
@@ -50,26 +61,34 @@ Sales Price - {salesPrice}\n""")
         answer = input(f"{YELLOW}Select Y to proceed or N to cancel: {RESET}").strip().upper()
 
         if answer == "Y":
-            cursor.execute('''
-            INSERT INTO Inventory ("Item Code", "Item Name", Stock, "On Order", "ReOrder Trigger", "Purchase Price", "Sale Price", "Amount Sold", Profit)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (itemCode, itemName, stockCount, 0, reOrderTrigger, purchasePrice, salesPrice, 0, 0))  
+            cursor.execute('SELECT "Item Code" FROM Inventory WHERE "Item Code" = ?', (itemCode,))
+            existing_item = cursor.fetchone()
 
-            connection.commit()
-            connection.close()
-            print(f"\n{GREEN} {itemCode} successfully added!")
+            if existing_item:
+                print(f"{RED}\nItem code {itemCode} already exists. Please use a different item code.{RESET}")
+                break
 
-            movements = "database/movements.db"
-            connection = sqlite3.connect(movements)
-            cursor = connection.cursor()
+            else:
+                cursor.execute('''
+                INSERT INTO Inventory ("Item Code", "Item Name", Stock, "On Order", "ReOrder Trigger", "Purchase Price", "Sale Price", "Amount Sold", Profit)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (itemCode, itemName, stockCount, 0, reOrderTrigger, purchasePrice, salesPrice, 0, 0))  
 
-            cursor.execute('''
-            INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
-            VALUES (?, ?, ?, ?, ?)
-            ''', (itemCode, stockCount, "ADD", username, time))
-            connection.commit()
-            connection.close() 
-            break
+                connection.commit()
+                connection.close()
+                print(f"\n{GREEN}{itemCode} successfully added!")
+
+                movements = "database/movements.db"
+                connection = sqlite3.connect(movements)
+                cursor = connection.cursor()
+
+                cursor.execute('''
+                INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
+                VALUES (?, ?, ?, ?, ?)
+                ''', (itemCode, stockCount, "ADD", fullname, time))
+                connection.commit()
+                connection.close() 
+                break
 
         elif answer == "N":
             break
@@ -77,7 +96,13 @@ Sales Price - {salesPrice}\n""")
         else: 
             print(f"{RED} Invalid input. Please enter 'Y' to proceed or 'N' to cancel.{RESET}")
 
-def removeItem(adminRights, storedPassword, username, time):
+def removeItem(adminRights, storedPassword, fullname, time):
+
+    """
+    Removes an item from the inventory if the user has admin rights.
+    Prompts for admin password, validates it, and deletes the item from the inventory if conditions are met.
+    Records the removal in the movements database.
+    """
 
     YELLOW = '\033[93m'
     RED = '\033[91m'
@@ -123,7 +148,7 @@ def removeItem(adminRights, storedPassword, username, time):
                             cursor.execute('''
                             INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
                             VALUES (?, ?, ?, ?, ?)
-                            ''', (itemCode, stockCount, "REMOVE", username, time))
+                            ''', (itemCode, stockCount, "REMOVE", fullname, time))
                             connection.commit()
                             connection.close() 
                             break
@@ -146,6 +171,12 @@ def removeItem(adminRights, storedPassword, username, time):
         print(f"{RED}You do not have permission to access this{RESET}")
 
 def searchByProductCode():
+
+    """
+    Searches for items in the inventory by product code.
+    Displays the results and offers an option to export them to a CSV file.
+    """
+
     YELLOW = '\033[93m'
     RED = '\033[91m'
     RESET = '\033[0m'
@@ -194,6 +225,12 @@ def searchByProductCode():
     connection.close()
 
 def searchByProductName():
+
+    """
+    Searches for items in the inventory by product name.
+    Displays the results and offers an option to export them to a CSV file.
+    """
+
     YELLOW = '\033[93m'
     RED = '\033[91m'
     RESET = '\033[0m'
@@ -242,6 +279,11 @@ def searchByProductName():
     connection.close()
 
 def showAllProducts():
+
+    """
+    Displays all products in the inventory and offers an option to export the results to a CSV file.
+    """
+    
     YELLOW = '\033[93m'
     RED = '\033[91m'
     RESET = '\033[0m'

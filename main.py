@@ -6,13 +6,36 @@ from loginFunctions import get_current_time, successful_login
 from menus import topMenu, numberSelection, itemManagementMenu
 from itemManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
 
+"""
+This program is something i have decided to try and create based on my experience working with various warehouse
+environment applications. It is a barebones small scale inventory management system that would be effective for 
+small scale bussinesses to use to keep track of inventory, orders and allow specific permissions to the required
+users.
+"""
+
+"""
+Establishes a connection to the user database.
+"""
 userDatabasePath = "database/userDatabase.db"
 connection = sqlite3.connect(userDatabasePath)
 cursor = connection.cursor()
 
+"""
+Initializes the attempts counter and login loop.
+"""
 loginLoop = True
 attempts = 4
 
+
+"""
+Handles user login process:
+- Prompts for username and password input.
+- Validates credentials against the database.
+- If no match is found, prompts the user.
+- If the password is incorrect, prompts the user and decrements the attempts counter. Locks the account if attempts reach 0.
+- If the account is locked, instructs the user to contact IT and exits.
+- If credentials are correct and the account is not locked, updates last login time and exits the loop to proceed to the next menu.
+"""
 while loginLoop == True:
     if attempts == 0:
         sys.exit(0)
@@ -51,6 +74,12 @@ while loginLoop == True:
     if match == None:
         print("Username not found")
 
+"""
+Checks if the user has admin rights and sets adminRights to True or False.
+This value will be used throughout the program to control access to certain functions.
+Creates a fullName variable from the user's database details and passes it, along with the current time, to the successful_login function.
+"""
+
 cursor.execute("SELECT first_name, last_name, admin_rights FROM users WHERE username = ?", (user.username,))
 match = cursor.fetchone()
 firstName = match[0]
@@ -70,6 +99,12 @@ RED = '\033[91m'
 RESET = '\033[0m'
 
 
+"""
+Main program loop:
+- Displays the top menu and handles user navigation between various functions.
+- Continues to run until the user selects 'exit'.
+- Navigates back to the parent menu upon completing each function.
+"""
 while True:
 
     topMenu(fullName)
@@ -81,10 +116,10 @@ while True:
         itemManagementSelection = numberSelection()
 
         if itemManagementSelection == 1:
-            addItem(user.username, time)
+            addItem(fullName, time)
 
         elif itemManagementSelection == 2:
-            removeItem(adminRights, stored_password, user.username, time)
+            removeItem(adminRights, stored_password, fullName.username, time)
 
         elif itemManagementSelection == 3:
             searchByProductCode()

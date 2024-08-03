@@ -1,6 +1,5 @@
-remove ability to delete items if stock is available
 Create movements database and add creation and deletion of items to while also including quantities and dates
-
+Encrypt passwords in database
 
 
 Stock Orders
@@ -9,6 +8,7 @@ Stock Orders
 2.3 Receive Order
 2.4 Cancel Order
 2.5 Order History
+2.6 stock needing re order
 
 Sales
 3.1 Process Sale

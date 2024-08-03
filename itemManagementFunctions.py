@@ -18,7 +18,7 @@ def get_decimal_input(prompt):
         except ValueError:
             print(f"{RED}Invalid input. Please enter a valid number.{RESET}")
 
-def addItem():
+def addItem(username, time):
 
     YELLOW = '\033[93m'
     RED = '\033[91m'
@@ -28,7 +28,6 @@ def addItem():
     itemDatabasePath = "database/itemDatabase.db"
     connection = sqlite3.connect(itemDatabasePath)
     cursor = connection.cursor()
-
 
     itemCode = input(f"\n{YELLOW}Item Code: {RESET}")
     itemName = input(f"{YELLOW}Item Name: {RESET}")
@@ -59,6 +58,17 @@ Sales Price - {salesPrice}\n""")
             connection.commit()
             connection.close()
             print(f"\n{GREEN} {itemCode} successfully added!")
+
+            movements = "database/movements.db"
+            connection = sqlite3.connect(movements)
+            cursor = connection.cursor()
+
+            cursor.execute('''
+            INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
+            VALUES (?, ?, ?, ?, ?)
+            ''', (itemCode, stockCount, "ADD", username, time))
+            connection.commit()
+            connection.close() 
             break
 
         elif answer == "N":
@@ -67,7 +77,7 @@ Sales Price - {salesPrice}\n""")
         else: 
             print(f"{RED} Invalid input. Please enter 'Y' to proceed or 'N' to cancel.{RESET}")
 
-def removeItem(adminRights, storedPassword):
+def removeItem(adminRights, storedPassword, username, time):
 
     YELLOW = '\033[93m'
     RED = '\033[91m'
@@ -90,17 +100,37 @@ def removeItem(adminRights, storedPassword):
             cursor.execute('''SELECT "Item Code", "Item Name" FROM Inventory WHERE "Item Code" = ?''', (code,))
             match = cursor.fetchone()
 
+            cursor.execute('''SELECT "Stock" FROM Inventory WHERE "Item Code" = ?''', (code,))
+            count = cursor.fetchone()
+            stockCount = count[0]
+
             if match:
                 itemCode, itemName = match
                 print(f"{GREEN}Item found: {itemCode} - {itemName}{RESET}")
 
                 while True:
                         confirm = input(f"\n{YELLOW}Are you sure you want to delete this item? (Y/N): {RESET}").strip().upper()
-                        if confirm == 'Y':
+                        if confirm == 'Y' and (stockCount <= 0):
                             cursor.execute('''DELETE FROM Inventory WHERE "Item Code" = ?''', (code,))
                             connection.commit()
                             print(f"\n{GREEN}Item {itemCode} - {itemName} has been deleted.{RESET}")
                             connection.close()
+
+                            movements = "database/movements.db"
+                            connection = sqlite3.connect(movements)
+                            cursor = connection.cursor()
+
+                            cursor.execute('''
+                            INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
+                            VALUES (?, ?, ?, ?, ?)
+                            ''', (itemCode, stockCount, "REMOVE", username, time))
+                            connection.commit()
+                            connection.close() 
+                            break
+                            return
+
+                        elif confirm == "Y" and (stockCount > 0):
+                            print(f"\n{RED}Stock count is greater than 0, cannot delete item.{RESET}")
                             return
                         elif confirm == 'N':
                             print(f"{YELLOW}Item deletion cancelled.{RESET}")

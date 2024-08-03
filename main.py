@@ -81,10 +81,10 @@ while True:
         itemManagementSelection = numberSelection()
 
         if itemManagementSelection == 1:
-            addItem()
+            addItem(user.username, time)
 
         elif itemManagementSelection == 2:
-            removeItem(adminRights, stored_password)
+            removeItem(adminRights, stored_password, user.username, time)
 
         elif itemManagementSelection == 3:
             searchByProductCode()

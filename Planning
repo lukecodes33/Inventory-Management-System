@@ -1,12 +1,13 @@
 Encrypt passwords in database
+change all full name and time to functions called from the constructors instead of passing into functions
+format all of companyOrderFunctions
+allow user to say yes or no to each item of received order 
+new naming scheme for companyorderfunction and Stockorder
 
 Stock Orders
-2.1 Place Order
-2.2 View Pending Orders
-2.3 Receive Order
+
 2.4 Cancel Order
-2.5 Order History
-2.6 stock needing re order
+
 
 Sales
 3.1 Process Sale

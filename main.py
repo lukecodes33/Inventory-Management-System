@@ -3,8 +3,9 @@ import sqlite3
 import sys
 import getpass
 from loginFunctions import get_current_time, successful_login
-from menus import topMenu, numberSelection, itemManagementMenu
+from menus import topMenu, numberSelection, itemManagementMenu, stockOrderMenu
 from itemManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
+from companyOrderFunctions import createPendingOrders, showPendingOrders, receiveOrder
 
 """
 This program is something i have decided to try and create based on my experience working with various warehouse
@@ -131,6 +132,26 @@ while True:
             showAllProducts()
             
         elif itemManagementSelection == 0:
+            break
+
+        else:
+            print(f"{RED}Invalid input.{RESET}")
+    
+    while topMenuSelection == 2:
+        stockOrderMenu(fullName)
+        stockOrderManagementSelection = numberSelection()
+
+        if stockOrderManagementSelection == 1:
+            createPendingOrders(fullName, time)
+
+        elif stockOrderManagementSelection == 2:
+            showPendingOrders()
+
+        elif stockOrderManagementSelection == 3:
+            receiveOrder(fullName, time)
+
+        
+        elif stockOrderManagementSelection == 0:
             break
 
         else:

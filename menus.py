@@ -63,6 +63,7 @@ def topMenu(fullname):
     print(center_text(underline, width))
     print("")
     print("1. Item Management".center(width))
+    print("2. Company Order Management".center(width))
     print("")
     print(f"User: {fullname}".center(width))
     print(f"{RESET}")
@@ -92,6 +93,36 @@ def itemManagementMenu(fullname):
     print("3. Search Item By Code".center(width))
     print("4. Search Item By Name".center(width))
     print("5. Search All Items".center(width))
+    print("")
+    print("0. Back".center(width))
+    print("")
+    print(f"User: {fullname}".center(width))
+    print(f"{RESET}")
+
+def stockOrderMenu(fullname):
+
+    """
+    Displays the stock order menu of the inventory management system.
+    
+    Parameters:
+    fullname (str): The full name of the user.
+    """
+    
+    YELLOW = '\033[93m'
+    RESET = '\033[0m'
+    width = get_terminal_size()
+
+    header = "STOCK ORDER MANAGEMENT"
+    underline = "-" * len(header)
+    
+    print(f"{YELLOW}")
+    print(center_text(header, width))
+    print(center_text(underline, width))
+    print("")
+    print("1. Create Pending Order".center(width))
+    print("2. View Pending Orders".center(width))
+    print("3. Recieve Order".center(width))
+    print("4. Cancel Order".center(width))
     print("")
     print("0. Back".center(width))
     print("")

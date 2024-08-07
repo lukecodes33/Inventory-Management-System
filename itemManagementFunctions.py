@@ -6,8 +6,8 @@ import os
 def get_decimal_input(prompt):
     
     """
-    Prompts the user for a decimal input with up to 2 decimal places.
-    If the input is invalid or has more than 2 decimal places, it prompts again.
+    - Prompts the user for a decimal input with up to 2 decimal places.
+    - If the input is invalid or has more than 2 decimal places, it prompts again.
     """
 
     RED = '\033[91m'
@@ -26,9 +26,9 @@ def get_decimal_input(prompt):
 def addItem(fullname, time):
 
     """
-    Adds a new item to the inventory and records the movement.
-    Prompts the user for item details, validates input, and inserts the item into the database.
-    Also records the addition in the movements database.
+    - Adds a new item to the inventory database.
+    - Prompts the user for item details, validates input, and inserts the item into the database.
+    - Also records the addition in the movements database.
     """
 
     YELLOW = '\033[93m'
@@ -62,9 +62,9 @@ Sales Price - {salesPrice}\n""")
 
         if answer == "Y":
             cursor.execute('SELECT "Item Code" FROM Inventory WHERE "Item Code" = ?', (itemCode,))
-            existing_item = cursor.fetchone()
+            existingItem = cursor.fetchone()
 
-            if existing_item:
+            if existingItem:
                 print(f"{RED}\nItem code {itemCode} already exists. Please use a different item code.{RESET}")
                 break
 
@@ -99,9 +99,9 @@ Sales Price - {salesPrice}\n""")
 def removeItem(adminRights, storedPassword, fullname, time):
 
     """
-    Removes an item from the inventory if the user has admin rights.
-    Prompts for admin password, validates it, and deletes the item from the inventory if conditions are met.
-    Records the removal in the movements database.
+    - Removes an item from the inventory if the user has admin rights.
+    - Prompts for admin password, validates it, and deletes the item from the inventory if conditions are met.
+    - Records the removal in the movements database.
     """
 
     YELLOW = '\033[93m'
@@ -173,8 +173,8 @@ def removeItem(adminRights, storedPassword, fullname, time):
 def searchByProductCode():
 
     """
-    Searches for items in the inventory by product code.
-    Displays the results and offers an option to export them to a CSV file.
+    - Searches for items in the inventory by product code.
+    - Displays the results and offers an option to export them to a CSV file.
     """
 
     YELLOW = '\033[93m'
@@ -210,8 +210,8 @@ def searchByProductCode():
         export = input(f"\n{YELLOW}Do you want to export the results to a CSV file? (Y/N): {RESET}").strip().upper()
         
         if export == 'Y':
-            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-            filename = os.path.join(desktop_path, f"{productCode}_searchResults.csv")
+            desktopPath = os.path.join(os.path.expanduser("~"), "Desktop")
+            filename = os.path.join(desktopPath, f"{productCode}_searchResults.csv")
             with open(filename, 'w', newline='') as csvfile:
                 csvwriter = csv.writer(csvfile)
                 csvwriter.writerows(rows)
@@ -227,8 +227,8 @@ def searchByProductCode():
 def searchByProductName():
 
     """
-    Searches for items in the inventory by product name.
-    Displays the results and offers an option to export them to a CSV file.
+    - Searches for items in the inventory by product name.
+    - Displays the results and offers an option to export them to a CSV file.
     """
 
     YELLOW = '\033[93m'
@@ -264,8 +264,8 @@ def searchByProductName():
         export = input(f"\n{YELLOW}Do you want to export the results to a CSV file? (Y/N): {RESET}").strip().upper()
         
         if export == 'Y':
-            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-            filename = os.path.join(desktop_path, f"{productName}_searchResults.csv")
+            desktopPath = os.path.join(os.path.expanduser("~"), "Desktop")
+            filename = os.path.join(desktopPath, f"{productName}_searchResults.csv")
             with open(filename, 'w', newline='') as csvfile:
                 csvwriter = csv.writer(csvfile)
                 csvwriter.writerows(rows)
@@ -281,7 +281,7 @@ def searchByProductName():
 def showAllProducts():
 
     """
-    Displays all products in the inventory and offers an option to export the results to a CSV file.
+    - Displays all products in the inventory and offers an option to export the results to a CSV file.
     """
     
     YELLOW = '\033[93m'
@@ -314,8 +314,8 @@ def showAllProducts():
         export = input(f"\n{YELLOW}Do you want to export the results to a CSV file? (Y/N): {RESET}").strip().upper()
         
         if export == 'Y':
-            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-            filename = os.path.join(desktop_path, "all_products.csv")
+            desktopPath = os.path.join(os.path.expanduser("~"), "Desktop")
+            filename = os.path.join(desktopPath, "all_products.csv")
             with open(filename, 'w', newline='') as csvfile:
                 csvwriter = csv.writer(csvfile)
                 csvwriter.writerows(rows)

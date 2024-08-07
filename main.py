@@ -5,7 +5,7 @@ import getpass
 from loginFunctions import get_current_time, successful_login
 from menus import topMenu, numberSelection, itemManagementMenu, stockOrderMenu
 from itemManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
-from companyOrderFunctions import createPendingOrders, showPendingOrders, receiveOrder
+from stockOrderFunctions import createPendingOrders, showPendingOrders, receiveOrder, cancelOrder
 
 """
 This program is something i have decided to try and create based on my experience working with various warehouse
@@ -149,7 +149,9 @@ while True:
 
         elif stockOrderManagementSelection == 3:
             receiveOrder(fullName, time)
-
+        
+        elif stockOrderManagementSelection == 4:
+            cancelOrder(fullName, time)
         
         elif stockOrderManagementSelection == 0:
             break

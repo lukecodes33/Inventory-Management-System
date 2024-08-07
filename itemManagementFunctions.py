@@ -2,12 +2,21 @@ import sqlite3
 import csv
 import getpass
 import os
+from loginFunctions import get_current_time
 
 def get_decimal_input(prompt):
     
     """
-    - Prompts the user for a decimal input with up to 2 decimal places.
+    Prompts the user for a decimal input with up to 2 decimal places.
+
     - If the input is invalid or has more than 2 decimal places, it prompts again.
+    - Validates the input to ensure it conforms to the required decimal format.
+
+    Parameters:
+    prompt (str): The message displayed to the user when asking for input.
+
+    Returns:
+    float: A valid decimal number with up to 2 decimal places.
     """
 
     RED = '\033[91m'
@@ -23,12 +32,19 @@ def get_decimal_input(prompt):
         except ValueError:
             print(f"{RED}Invalid input. Please enter a valid number.{RESET}")
 
-def addItem(fullname, time):
+def addItem(fullname):
 
     """
-    - Adds a new item to the inventory database.
-    - Prompts the user for item details, validates input, and inserts the item into the database.
-    - Also records the addition in the movements database.
+    Adds a new item to the inventory table of the itemDatabase database.
+
+    - Prompts the user for item details (item code, item name, stock, reorder trigger, purchase price, sale price).
+    - Validates the input and ensures the item code does not already exist in the inventory.
+    - Inserts the new item into the inventory database.
+    - Records the addition in the movements database.
+
+    Parameters:
+    fullname (str): The full name of the user adding the item.
+    time (str): The current time when the item is added.
     """
 
     YELLOW = '\033[93m'
@@ -85,7 +101,7 @@ Sales Price - {salesPrice}\n""")
                 cursor.execute('''
                 INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
                 VALUES (?, ?, ?, ?, ?)
-                ''', (itemCode, stockCount, "ADD", fullname, time))
+                ''', (itemCode, stockCount, "ADD", fullname, get_current_time()))
                 connection.commit()
                 connection.close() 
                 break
@@ -96,12 +112,19 @@ Sales Price - {salesPrice}\n""")
         else: 
             print(f"{RED} Invalid input. Please enter 'Y' to proceed or 'N' to cancel.{RESET}")
 
-def removeItem(adminRights, storedPassword, fullname, time):
+def removeItem(adminRights, storedPassword, fullname):
 
     """
-    - Removes an item from the inventory if the user has admin rights.
-    - Prompts for admin password, validates it, and deletes the item from the inventory if conditions are met.
+    Removes an item from the inventory table of the itemDatabase if the user has admin rights.
+
+    - Prompts the user for the admin password, validates it, and deletes the item from the inventory if conditions are met.
+    - Ensures the item exists and has a stock count of zero before deletion.
     - Records the removal in the movements database.
+
+    Parameters:
+    adminRights (bool): Indicates if the user has admin rights.
+    storedPassword (str): The stored admin password for validation.
+    fullname (str): The full name of the user performing the deletion.
     """
 
     YELLOW = '\033[93m'
@@ -148,7 +171,7 @@ def removeItem(adminRights, storedPassword, fullname, time):
                             cursor.execute('''
                             INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
                             VALUES (?, ?, ?, ?, ?)
-                            ''', (itemCode, stockCount, "REMOVE", fullname, time))
+                            ''', (itemCode, stockCount, "REMOVE", fullname, get_current_time()))
                             connection.commit()
                             connection.close() 
                             break
@@ -173,8 +196,13 @@ def removeItem(adminRights, storedPassword, fullname, time):
 def searchByProductCode():
 
     """
-    - Searches for items in the inventory by product code.
-    - Displays the results and offers an option to export them to a CSV file.
+    Searches for items in the inventory table of the itemDatabase by product code and displays the results.
+
+    - Prompts the user to input a product code.
+    - Searches the inventory database for items matching the product code.
+    - Displays the results in a formatted table.
+    - Offers the user an option to export the results to a CSV file.
+
     """
 
     YELLOW = '\033[93m'
@@ -227,8 +255,13 @@ def searchByProductCode():
 def searchByProductName():
 
     """
-    - Searches for items in the inventory by product name.
-    - Displays the results and offers an option to export them to a CSV file.
+    Searches for items in the inventory table of the itemDatabase by product name and displays the results.
+
+    - Prompts the user to input a product name.
+    - Searches the inventory database for items matching the product name.
+    - Displays the results in a formatted table.
+    - Offers the user an option to export the results to a CSV file.
+
     """
 
     YELLOW = '\033[93m'
@@ -281,7 +314,13 @@ def searchByProductName():
 def showAllProducts():
 
     """
-    - Displays all products in the inventory and offers an option to export the results to a CSV file.
+    Displays all products in the inventory table of the itemDatabase and offers an option to export the results to a CSV file.
+
+    - Connects to the inventory database and retrieves all product details.
+    - Displays the retrieved products in a formatted table.
+    - Prompts the user to export the displayed results to a CSV file.
+    - Exports the results to a CSV file on the user's desktop if requested.
+
     """
     
     YELLOW = '\033[93m'

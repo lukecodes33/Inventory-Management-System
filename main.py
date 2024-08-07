@@ -117,10 +117,10 @@ while True:
         itemManagementSelection = numberSelection()
 
         if itemManagementSelection == 1:
-            addItem(fullName, time)
+            addItem(fullName)
 
         elif itemManagementSelection == 2:
-            removeItem(adminRights, stored_password, fullName.username, time)
+            removeItem(adminRights, stored_password, fullName.username)
 
         elif itemManagementSelection == 3:
             searchByProductCode()
@@ -142,16 +142,16 @@ while True:
         stockOrderManagementSelection = numberSelection()
 
         if stockOrderManagementSelection == 1:
-            createPendingOrders(fullName, time)
+            createPendingOrders(fullName)
 
         elif stockOrderManagementSelection == 2:
             showPendingOrders()
 
         elif stockOrderManagementSelection == 3:
-            receiveOrder(fullName, time)
+            receiveOrder(fullName)
         
         elif stockOrderManagementSelection == 4:
-            cancelOrder(fullName, time)
+            cancelOrder(fullName)
         
         elif stockOrderManagementSelection == 0:
             break

@@ -2,12 +2,21 @@ import sqlite3
 import random
 import os
 import csv
+from loginFunctions import get_current_time
 
-def createPendingOrders(fullName, time):
-
+def createPendingOrders(fullName):
+   
     """
-    - Creates pending order, auto generates a random 10 digit reference number if the user does not provide one. 
-    - Updates databases with a pending order and stock on order value.
+    Creates a pending order in the system.
+
+    - Prompts the user for an order reference number. If the user does not provide one, a random 10-digit reference number is auto-generated.
+    - Prompts the user to enter item codes and amounts, validating that the item exists in the inventory.
+    - Updates the inventory database to reflect the pending order and stock on order value.
+    - Logs the pending order in the pending orders database and records the transaction in the movements database.
+    - Allows the user to add multiple items to the same order.
+    
+    Parameters:
+    fullName (str): The full name of the user creating the pending order.
     """
 
     YELLOW = '\033[93m'
@@ -71,7 +80,7 @@ def createPendingOrders(fullName, time):
         cursor.execute('''
                 INSERT INTO pendingOrders ("Item Code", "Amount", "Reference", "User", "Date")
                 VALUES (?, ?, ?, ?, ?)
-                ''', (itemCode, amount, reference, fullName, time))
+                ''', (itemCode, amount, reference, fullName, get_current_time()))
         connection.commit()
         connection.close() 
 
@@ -82,7 +91,7 @@ def createPendingOrders(fullName, time):
         cursor.execute('''
                 INSERT INTO movements ("Item", "Amount", "Type", "User", "Date")
                 VALUES (?, ?, ?, ?, ?)
-                ''', (itemCode, amount, "PENDING ORDER", fullName, time))
+                ''', (itemCode, amount, "PENDING ORDER", fullName, get_current_time()))
         connection.commit()
         connection.close() 
 
@@ -94,9 +103,15 @@ def createPendingOrders(fullName, time):
             break
 
 def showPendingOrders():
-
+    
     """
-    - Displays all pending orders and offers an option to export the results to a CSV file.
+    Displays all pending orders from the database and offers the option to export the results to a CSV file.
+
+    - Connects to the pending orders database.
+    - Fetches all pending orders and displays them in a formatted table.
+    - Prompts the user to export the displayed results to a CSV file.
+    - Handles user input validation for the export option.
+    - Exports the results to a CSV file on the user's desktop if requested.
     """
     
     YELLOW = '\033[93m'
@@ -146,12 +161,20 @@ def showPendingOrders():
 
     connection.close()
 
-def receiveOrder(fullName, time):
+def receiveOrder(fullName):
 
     """
-    - Takes input from user reference number. 
-    - Gets all matches for that reference from pending order and user can confirm to recieve the order 
-    - updates values in item database, removes itself from pending orders and logs transaction in movements.
+    Processes the receiving of a pending order.
+
+    - Takes input from the user for the order reference number.
+    - Retrieves all matches for that reference number from the pending orders database.
+    - Prompts the user to confirm the receipt of each item in the order.
+    - Updates the stock and on order values in the item database.
+    - Removes the processed order from the pending orders database.
+    - Logs the transaction in the movements database.
+
+    Parameters:
+    fullName (str): The full name of the user processing the order.
     """
     
     YELLOW = '\033[93m'
@@ -205,7 +228,7 @@ def receiveOrder(fullName, time):
                                     (newStock, newOnOrder, itemCode))
                 connectionItem.commit()
 
-                cursorMovements.execute('INSERT INTO Movements ("Item", "Amount", "Type", "User", "Date") VALUES (?, ?, ?, ?, ?)', (itemCode, amount, "RECIEVED ORDER", fullName, time))
+                cursorMovements.execute('INSERT INTO Movements ("Item", "Amount", "Type", "User", "Date") VALUES (?, ?, ?, ?, ?)', (itemCode, amount, "RECIEVED ORDER", fullName, get_current_time()))
                 connectionMovements.commit()
 
                 cursorPendingOrders.execute('DELETE FROM pendingOrders WHERE "Reference" = ? AND "Item Code" = ?',
@@ -222,12 +245,20 @@ def receiveOrder(fullName, time):
 
     connectionPendingOrders.close()
 
-def cancelOrder(fullName, time):
+def cancelOrder(fullName):
 
     """
-    - Takes input from user reference number. 
-    - Gets all matches for that reference from pending order and user can confirm to cancel the order 
-    - updates values in item database, removes itself from pending orders and logs transaction in movements.
+    Cancels a pending order or partial order based on user input.
+
+    - Takes input from the user for the order reference number.
+    - Retrieves all matches for that reference number from the pending orders database.
+    - Prompts the user to confirm the cancellation of each item in the order.
+    - Updates the inventory database to reflect the cancellation.
+    - Removes the cancelled order from the pending orders database.
+    - Logs the cancellation transaction in the movements database.
+
+    Parameters:
+    fullName (str): The full name of the user performing the cancellation.
     """
     
     YELLOW = '\033[93m'
@@ -280,7 +311,7 @@ def cancelOrder(fullName, time):
                                     (newOnOrder, itemCode))
                 connectionItem.commit()
 
-                cursorMovements.execute('INSERT INTO Movements ("Item", "Amount", "Type", "User", "Date") VALUES (?, ?, ?, ?, ?)', (itemCode, amount, "CANCELLED ORDER", fullName, time))
+                cursorMovements.execute('INSERT INTO Movements ("Item", "Amount", "Type", "User", "Date") VALUES (?, ?, ?, ?, ?)', (itemCode, amount, "CANCELLED ORDER", fullName, get_current_time()))
                 connectionMovements.commit()
 
                 cursorPending.execute('DELETE FROM pendingOrders WHERE "Reference" = ? AND "Item Code" = ?',

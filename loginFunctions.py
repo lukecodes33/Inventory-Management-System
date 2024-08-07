@@ -12,7 +12,7 @@ def get_current_time():
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     return formatted_time
 
-def successful_login(name, time):
+def successful_login(name):
 
     """
     Logs a successful login attempt to the logins database with the user's name, 
@@ -27,7 +27,7 @@ def successful_login(name, time):
     cursor.execute('''
     INSERT INTO logins (name, time, device)
     VALUES (?, ?, ?)
-    ''', (name, time, hostname))  
+    ''', (name, get_current_time(), hostname))  
 
     connection.commit()
     connection.close()

@@ -62,7 +62,8 @@ def topMenu(fullname):
     print(center_text(underline, width))
     print("")
     print("1. Item Management".center(width))
-    print("2. Company Order Management".center(width))
+    print("2. Stock Order Management".center(width))
+    print("3. Inventory Management".center(width))
     print("")
     print(f"User: {fullname}".center(width))
     print(f"{RESET}")
@@ -122,6 +123,29 @@ def stockOrderMenu(fullname):
     print("2. View Pending Orders".center(width))
     print("3. Recieve Order".center(width))
     print("4. Cancel Order".center(width))
+    print("")
+    print("0. Back".center(width))
+    print("")
+    print(f"User: {fullname}".center(width))
+    print(f"{RESET}")
+
+
+def inventoryManagamentMenu(fullname):
+
+    YELLOW = '\033[93m'
+    RESET = '\033[0m'
+    width = get_terminal_size()
+
+    header = "INVENTORY MANAGEMENT"
+    underline = "-" * len(header)
+    
+    print(f"{YELLOW}")
+    print(center_text(header, width))
+    print(center_text(underline, width))
+    print("")
+    print("1. Low Stock Check".center(width))
+    print("2. Reset Re Order Amounts".center(width))
+    print("3. Write Off Stock".center(width))
     print("")
     print("0. Back".center(width))
     print("")

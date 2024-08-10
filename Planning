@@ -1,15 +1,12 @@
 Encrypt passwords in database
 change all full name to functions called from the constructors instead of passing into functions
+create adminRIghts constructor instead of parsing
 
 
 Sales
 3.1 Process Sale
 3.2 Return Item
 3.3 View Transaction History
-
-Inventory Management
-4.1 View Low Stock Items
-4.2 Set Reorder Levels
 
 
 Admin Tools

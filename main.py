@@ -3,9 +3,10 @@ import sqlite3
 import sys
 import getpass
 from loginFunctions import get_current_time, successful_login
-from menus import topMenu, numberSelection, itemManagementMenu, stockOrderMenu
-from itemManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
+from menus import topMenu, numberSelection, itemManagementMenu, stockOrderMenu, inventoryManagamentMenu
+from stockManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
 from stockOrderFunctions import createPendingOrders, showPendingOrders, receiveOrder, cancelOrder
+from inventoryManagamentFunctions import lowStockItems, setReOrderLevel, writeOffStock
 
 """
 This program is something i have decided to try and create based on my experience working with various warehouse
@@ -92,7 +93,7 @@ adminRights = False
 if admin_rights_value == 1:
     adminRights = True
 
-successful_login(fullName, time)
+successful_login(fullName)
 
 connection.close()
 
@@ -158,3 +159,16 @@ while True:
 
         else:
             print(f"{RED}Invalid input.{RESET}")
+    
+    if topMenuSelection == 3:
+        inventoryManagamentMenu(fullName)
+        stockOrderManagementSelection = numberSelection()
+
+        if stockOrderManagementSelection == 1:
+            lowStockItems()
+
+        elif stockOrderManagementSelection == 2:
+            setReOrderLevel(adminRights)
+
+        elif stockOrderManagementSelection == 3:
+            writeOffStock(adminRights, fullName)

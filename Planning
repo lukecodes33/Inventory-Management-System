@@ -1,22 +1,12 @@
 Encrypt passwords in database
 change all full name to functions called from the constructors instead of passing into functions
 create adminRIghts constructor instead of parsing
-
-
-Sales
-3.1 Process Sale
-3.2 Return Item
-3.3 View Transaction History
+refunds
+first loggin password Reset
+update passwordss
 
 
 Admin Tools
 6.1 Create User
 6.2 Delete User
-6.3 Clear Database
-6.3.1 Clear Items Database
-6.3.2 Clear Sales Database
-6.3.3 Clear Orders Database
 6.4 Clear All Databases (CANNOT BE UNDONE)
-6.5 System Backup
-6.6 Restore System from Backup
-6.7 User Report

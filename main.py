@@ -3,10 +3,11 @@ import sqlite3
 import sys
 import getpass
 from loginFunctions import get_current_time, successful_login
-from menus import topMenu, numberSelection, itemManagementMenu, stockOrderMenu, inventoryManagamentMenu
+from menus import topMenu, numberSelection, itemManagementMenu, stockOrderMenu, inventoryManagamentMenu, salesManagement
 from stockManagementFunctions import addItem, removeItem, searchByProductCode, searchByProductName, showAllProducts
 from stockOrderFunctions import createPendingOrders, showPendingOrders, receiveOrder, cancelOrder
 from inventoryManagamentFunctions import lowStockItems, setReOrderLevel, writeOffStock
+from salesFunctions import processSales, viewTransaction
 
 """
 This program is something i have decided to try and create based on my experience working with various warehouse
@@ -160,7 +161,7 @@ while True:
         else:
             print(f"{RED}Invalid input.{RESET}")
     
-    if topMenuSelection == 3:
+    while topMenuSelection == 3:
         inventoryManagamentMenu(fullName)
         stockOrderManagementSelection = numberSelection()
 
@@ -172,3 +173,27 @@ while True:
 
         elif stockOrderManagementSelection == 3:
             writeOffStock(adminRights, fullName)
+        
+        elif stockOrderManagementSelection == 0:
+            break
+
+        else:
+            print(f"{RED}Invalid input.{RESET}")
+
+    while topMenuSelection == 4:
+        salesManagement(fullName)
+        stockOrderManagementSelection = numberSelection()
+
+        if stockOrderManagementSelection == 1:
+            processSales(fullName)
+
+        elif stockOrderManagementSelection == 2:
+            viewTransaction()
+        
+        elif stockOrderManagementSelection == 0:
+            break
+
+        else:
+            print(f"{RED}Invalid input.{RESET}")
+
+

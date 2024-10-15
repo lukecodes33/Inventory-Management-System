@@ -57,10 +57,6 @@ def lowStockItems():
     else:
         print(f"{GREEN}No stock levels are low!.{RESET}")
 
-
-
-
-
 def setReOrderLevel(adminRights):
 
     """
@@ -121,7 +117,6 @@ def setReOrderLevel(adminRights):
         connection.close()
     else:
         print(f"{RED}You do not have the necessary admin rights to perform this action.{RESET}")
-
 
 def writeOffStock(adminRights, fullname):
 
